@@ -27,33 +27,33 @@ function _init()
 end
 
 function _update60()
-	if (game_over) then
-		if (btn(❎)) _init()
-		return
-	end
+    if (game_over) then
+        if (btn(❎)) _init()
+        return
+    end
 
     if (should_add_pipe()) add(pipes, make_random_pipe())
 
     if (too_many_pipes()) deli(pipes, 1)
 
-	foreach(pipes, function(p)
-		p:move()
-	end)
+    foreach(pipes, function(p)
+        p:move()
+    end)
 
-	if (btn(⬆️)) then
-		bird:flap()
-	else
-		bird:drop()
-	end
+    if (btn(⬆️)) then
+        bird:flap()
+    else
+        bird:drop()
+    end
 
-	foreach(pipes, function(p)
-		if (p:collides(bird)) game_over = true
-	end)
+    foreach(pipes, function(p)
+        if (p:collides(bird)) game_over = true
+    end)
 
-	if (bird:is_offscreen()) game_over = true
+    if (bird:is_offscreen()) game_over = true
 
-	frame += 1
-	score += 1
+    frame += 1
+    score += 1
     best_score = max(score, best_score)
 end
 
@@ -68,11 +68,11 @@ function _draw()
 
     bird:draw()
 
- 	score_overlay()
+    score_overlay()
 
- 	if (debug) debug_overlay()
+    if (debug) debug_overlay()
 
- 	if (game_over) game_over_overlay()
+    if (game_over) game_over_overlay()
 end
 
 function should_add_pipe()
@@ -84,7 +84,7 @@ function too_many_pipes()
 end
 
 function hcenter(text)
-	return (screen_max / 2) - (#text * 2)
+    return (screen_max / 2) - (#text * 2)
 end
 
 function vcenter(text)
@@ -92,15 +92,15 @@ function vcenter(text)
 end
 
 function bracket(value)
-	return max(0, min(screen_max - sprite_size, value))
+    return max(0, min(screen_max - sprite_size, value))
 end
 
 function collide(a, b)
-	horizontal = abs(a.x - b.x)
-	vertical = abs(a.y - b.y)
-	tolerance = 2
-	threshold = sprite_size - tolerance
-	return horizontal <= threshold  and vertical <= threshold
+    horizontal = abs(a.x - b.x)
+    vertical = abs(a.y - b.y)
+    tolerance = 2
+    threshold = sprite_size - tolerance
+    return horizontal <= threshold  and vertical <= threshold
 end
 
 function make_random_pipe()
@@ -108,22 +108,22 @@ function make_random_pipe()
 end
 
 function make_pipe(x, height)
- 	hitboxes = {}
+    hitboxes = {}
 
-	gap = sprite_size * 2.5
+    gap = sprite_size * 2.5
 
-	for i = 0, height, sprite_size do
-		add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
-	end
+    for i = 0, height, sprite_size do
+        add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
+    end
 
     pipe_down = {sprite = sprites.pipe_down, x = x, y = height}
-	add(hitboxes, pipe_down)
+    add(hitboxes, pipe_down)
 
     pipe_up = {sprite = sprites.pipe_up, x = x, y = pipe_down.y + sprite_size + gap}
-	add(hitboxes, pipe_up)
+    add(hitboxes, pipe_up)
 
     for i = pipe_up.y, screen_max, sprite_size do
-		add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
+        add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
     end
 
     return {
@@ -138,76 +138,76 @@ function make_pipe(x, height)
             foreach(self.hitboxes, function(h)
                 if (collide(h, other)) hit = true
             end)
-			return hit
-     	end,
-		draw = function(self)
-			foreach(self.hitboxes, function(h)
-				spr(h.sprite, h.x, h.y)
-			end)
-		end
+            return hit
+        end,
+        draw = function(self)
+            foreach(self.hitboxes, function(h)
+                spr(h.sprite, h.x, h.y)
+            end)
+        end
     }
 end
 
 function make_bird(x, y)
-	gravity = 0.1
-	jump = -1.2
- 	return {
-		x = x,
-		y = y,
-		vy = 0,
-		body_sprite = sprites.bird_body,
-		wing_sprite = sprites.bird_rest,
-		drop = function(self, frame)
-			self.vy += gravity
-			self.y += self.vy
-			self.wing_sprite = sprites.bird_rest
-		end,
-		flap = function(self)
-	 		self.vy = jump
-			self.y = bracket(self.y + self.vy)
-			self.wing_sprite = sprites.bird_flap
-		end,
-		is_offscreen = function(self)
+    gravity = 0.1
+    jump = -1.2
+    return {
+        x = x,
+        y = y,
+        vy = 0,
+        body_sprite = sprites.bird_body,
+        wing_sprite = sprites.bird_rest,
+        drop = function(self, frame)
+            self.vy += gravity
+            self.y += self.vy
+            self.wing_sprite = sprites.bird_rest
+        end,
+        flap = function(self)
+            self.vy = jump
+            self.y = bracket(self.y + self.vy)
+            self.wing_sprite = sprites.bird_flap
+        end,
+        is_offscreen = function(self)
             return (self.y >= screen_max) or (self.y <= screen_min - sprite_size / 2)
         end,
-		draw = function(self)
-			spr(self.body_sprite, self.x, self.y)
-			spr(self.wing_sprite, self.x, self.y)
-		end
- 	}
+        draw = function(self)
+            spr(self.body_sprite, self.x, self.y)
+            spr(self.wing_sprite, self.x, self.y)
+        end
+    }
 end
 
 function game_over_overlay()
-	text = {
-		game_over = "g a m e   o v e r",
-		best_score = "best score: "..best_score,
-		press_key = "press ❎ to restart"
-	}
-	rectfill(16, 48, 112, 88,5)
-	rect(17, 49, 111, 87, 7)
-	print(text.game_over, hcenter(text.game_over), 57, 0)
-	print(text.game_over, hcenter(text.game_over), 56, 7)
-	print(text.best_score, hcenter(text.best_score), 69, 0)
-	print(text.best_score, hcenter(text.best_score), 68, 7)
-	print(text.press_key, hcenter(text.press_key), 77, 0)
-	print(text.press_key, hcenter(text.press_key), 76, 7)
+    text = {
+        game_over = "g a m e   o v e r",
+        best_score = "best score: "..best_score,
+        press_key = "press ❎ to restart"
+    }
+    rectfill(16, 48, 112, 88,5)
+    rect(17, 49, 111, 87, 7)
+    print(text.game_over, hcenter(text.game_over), 57, 0)
+    print(text.game_over, hcenter(text.game_over), 56, 7)
+    print(text.best_score, hcenter(text.best_score), 69, 0)
+    print(text.best_score, hcenter(text.best_score), 68, 7)
+    print(text.press_key, hcenter(text.press_key), 77, 0)
+    print(text.press_key, hcenter(text.press_key), 76, 7)
 end
 
 function score_overlay()
-	print("score: "..score, 4, score_y, 7)
+    print("score: "..score, 4, score_y, 7)
 end
 
 function debug_overlay()
-	lines = {
-		-- put strings here
-	}
-	for i,l in ipairs(lines) do
-		print("--"..l, 4, score_y + (text_size * i), 7)
-	end
+    lines = {
+        -- put strings here
+    }
+    for i,l in ipairs(lines) do
+        print("--"..l, 4, score_y + (text_size * i), 7)
+    end
 end
 
 function map_overlay()
-	map(0, 0, 0, (screen_max / 2) - sprite_size)
+    map(0, 0, 0, (screen_max / 2) - sprite_size)
 end
 __gfx__
 0000000000000000cccccccc7abbbbbb07abbbb007abbbb000000000000000000000000077777777000000000000000000000000000000000000000000000000
