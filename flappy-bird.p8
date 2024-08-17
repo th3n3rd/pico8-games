@@ -14,7 +14,7 @@ function _init()
     frame = 0
     score = 0
     game_over = false
-    pipes = { make_random_pipe() }
+    pipes = {}
     bird = make_bird(screen_max / 2, screen_max / 2)
 end
 
@@ -24,7 +24,6 @@ function _update60()
 		return
 	end
 
-	frame += 1
     if ((frame % 100) == 0) then
         add(pipes, make_random_pipe())
     end
@@ -52,6 +51,8 @@ function _update60()
 
 	if ((bird.y >= screen_max)) game_over = true
 	if ((bird.y <= screen_min - sprite_size / 2)) game_over = true
+
+	frame += 1
 end
 
 function _draw()
