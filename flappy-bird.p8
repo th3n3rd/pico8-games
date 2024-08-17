@@ -37,9 +37,9 @@ colours = {
 }
 
 function _init()
-    frame = 0
-    score = 0
     game_over = false
+    frame = 0
+    score = track_score()
     pipes = {}
     bird = make_bird(screen_center, screen_center)
 end
@@ -71,8 +71,8 @@ function _update60()
     if (bird:is_offscreen()) game_over = true
 
     frame += 1
-    score += 1
-    best_score = max(score, best_score)
+    score:increment()
+    best_score = max(score.value, best_score)
 end
 
 function _draw()
@@ -86,7 +86,7 @@ function _draw()
 
     bird:draw()
 
-    score_overlay()
+    score:draw()
 
     if (debug) debug_overlay()
 
@@ -211,8 +211,18 @@ function game_over_overlay()
     print(text.press_key, hcenter(text.press_key), 76, colours.white)
 end
 
-function score_overlay()
-    print("score: "..score, 4, score_y, colours.white)
+function track_score()
+    return {
+        value = 0,
+        x = 4,
+        y = score_y,
+        increment = function(self)
+            self.value += 1
+        end,
+        draw = function(self)
+           print("score: "..self.value, self.x, self.y, colours.white)
+        end
+    }
 end
 
 function debug_overlay()
