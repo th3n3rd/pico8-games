@@ -7,7 +7,6 @@ screen_max = 128
 screen_center = screen_max / 2
 sprite_size = 8
 text_size = 8
-bg = 12
 score_y = 4
 debug = true
 sprites = {
@@ -17,6 +16,24 @@ sprites = {
     pipe_up = 3,
     pipe_body = 4,
     pipe_down = 5
+}
+colours = {
+    black = 0,
+    dark_blue = 1,
+    dark_purple = 2,
+    dark_green = 3,
+    brown = 4,
+    dark_grey = 5,
+    light_grey = 6,
+    white = 7,
+    red = 8,
+    orange = 9,
+    yellow = 10,
+    light_green = 11,
+    light_blue = 12,
+    lavender = 13,
+    pink = 14,
+    light_peach = 15
 }
 
 function _init()
@@ -59,7 +76,7 @@ function _update60()
 end
 
 function _draw()
-    cls(bg)
+    cls(colours.light_blue)
 
     map_overlay()
 
@@ -184,18 +201,18 @@ function game_over_overlay()
         best_score = "best score: "..best_score,
         press_key = "press ❎ to restart"
     }
-    rectfill(16, 48, 112, 88,5)
-    rect(17, 49, 111, 87, 7)
-    print(text.game_over, hcenter(text.game_over), 57, 0)
-    print(text.game_over, hcenter(text.game_over), 56, 7)
-    print(text.best_score, hcenter(text.best_score), 69, 0)
-    print(text.best_score, hcenter(text.best_score), 68, 7)
-    print(text.press_key, hcenter(text.press_key), 77, 0)
-    print(text.press_key, hcenter(text.press_key), 76, 7)
+    rectfill(16, 48, 112, 88, colours.dark_grey)
+    rect(17, 49, 111, 87, colours.white)
+    print(text.game_over, hcenter(text.game_over), 57, colours.black)
+    print(text.game_over, hcenter(text.game_over), 56, colours.white)
+    print(text.best_score, hcenter(text.best_score), 69, colours.black)
+    print(text.best_score, hcenter(text.best_score), 68, colours.white)
+    print(text.press_key, hcenter(text.press_key), 77, colours.black)
+    print(text.press_key, hcenter(text.press_key), 76, colours.white)
 end
 
 function score_overlay()
-    print("score: "..score, 4, score_y, 7)
+    print("score: "..score, 4, score_y, colours.white)
 end
 
 function debug_overlay()
@@ -203,7 +220,7 @@ function debug_overlay()
         -- put strings here
     }
     for i,l in ipairs(lines) do
-        print("--"..l, 4, score_y + (text_size * i), 7)
+        print("--"..l, 4, score_y + (text_size * i), colours.white)
     end
 end
 
