@@ -7,7 +7,6 @@ screen_max = 128
 screen_center = screen_max / 2
 sprite_size = 8
 text_size = 8
-score_y = 4
 debug = true
 sprites = {
     bird_body = 1,
@@ -215,7 +214,7 @@ function track_score()
     return {
         value = 0,
         x = 4,
-        y = score_y,
+        y = 4,
         increment = function(self)
             self.value += 1
         end,
@@ -230,7 +229,7 @@ function debug_overlay()
         -- put strings here
     }
     for i,l in ipairs(lines) do
-        print("--"..l, 4, score_y + (text_size * i), colours.white)
+        print("--"..l, score.x, score.y + (text_size * i), colours.white)
     end
 end
 
