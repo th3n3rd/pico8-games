@@ -116,11 +116,13 @@ function make_pipe(x, height)
 		add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
 	end
 
-	add(hitboxes, {sprite = sprites.pipe_down, x = x, y = height})
+    pipe_down = {sprite = sprites.pipe_down, x = x, y = height}
+	add(hitboxes, pipe_down)
 
-	add(hitboxes, {sprite = sprites.pipe_up, x = x, y = height + gap + sprite_size})
+    pipe_up = {sprite = sprites.pipe_up, x = x, y = pipe_down.y + sprite_size + gap}
+	add(hitboxes, pipe_up)
 
-    for i = height + gap + sprite_size, screen_max, sprite_size do
+    for i = pipe_up.y, screen_max, sprite_size do
 		add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
     end
 
