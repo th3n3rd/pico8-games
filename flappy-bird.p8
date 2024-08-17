@@ -42,8 +42,7 @@ function _update60()
 		if (p:collides(bird)) game_over = true
 	end)
 
-	if (bird.y >= screen_max) game_over = true
-	if (bird.y <= screen_min - sprite_size / 2) game_over = true
+	if (bird:is_offscreen()) game_over = true
 
 	frame += 1
 	score += 1
@@ -164,6 +163,9 @@ function make_bird(x, y)
 			self.y = bracket(self.y + self.vy)
 			self.wing_sprite = flap
 		end,
+		is_offscreen = function(self)
+            return (self.y >= screen_max) or (self.y <= screen_min - sprite_size / 2)
+        end,
 		draw = function(self)
 			spr(self.body_sprite, self.x, self.y)
 			spr(self.wing_sprite, self.x, self.y)
