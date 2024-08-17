@@ -69,10 +69,7 @@ function _draw()
 
  	if ((debug)) debug_overlay()
 
- 	if (game_over) then
-		game_over_overlay()
-		return
-	end
+ 	if ((game_over)) game_over_overlay()
 end
 
 function hcenter(text)
