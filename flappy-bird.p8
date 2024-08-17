@@ -20,7 +20,7 @@ end
 
 function _update60()
 	if (game_over) then
-		if ((btn(❎))) _init()
+		if (btn(❎)) _init()
 		return
 	end
 
@@ -28,9 +28,7 @@ function _update60()
         add(pipes, make_random_pipe())
     end
 
-    if ((#pipes > 2)) then
-        deli(pipes, 1)
-    end
+    if (#pipes > 2) deli(pipes, 1)
 
 	foreach(pipes, function(p)
 		p:move()
@@ -43,11 +41,11 @@ function _update60()
 	end
 
 	foreach(pipes, function(p)
-		if ((p:collides(bird))) game_over = true
+		if (p:collides(bird)) game_over = true
 	end)
 
-	if ((bird.y >= screen_max)) game_over = true
-	if ((bird.y <= screen_min - sprite_size / 2)) game_over = true
+	if (bird.y >= screen_max) game_over = true
+	if (bird.y <= screen_min - sprite_size / 2) game_over = true
 
 	frame += 1
 	score += 1
@@ -67,9 +65,9 @@ function _draw()
 
  	score_overlay()
 
- 	if ((debug)) debug_overlay()
+ 	if (debug) debug_overlay()
 
- 	if ((game_over)) game_over_overlay()
+ 	if (game_over) game_over_overlay()
 end
 
 function hcenter(text)
