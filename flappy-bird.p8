@@ -36,9 +36,6 @@ function _update60()
 		p:move()
 	end)
 
- 	score += 1
- 	best_score = max(score, best_score)
-
 	if (btn(⬆️)) then
 		bird:flap()
 	else
@@ -53,6 +50,8 @@ function _update60()
 	if ((bird.y <= screen_min - sprite_size / 2)) game_over = true
 
 	frame += 1
+	score += 1
+    best_score = max(score, best_score)
 end
 
 function _draw()
