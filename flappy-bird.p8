@@ -9,6 +9,14 @@ text_size = 8
 bg = 12
 score_y = 4
 debug = true
+sprites = {
+    bird_body = 1,
+    bird_rest = 17,
+    bird_flap = 18,
+    pipe_up = 3,
+    pipe_body = 4,
+    pipe_down = 5
+}
 
 function _init()
     frame = 0
@@ -100,24 +108,20 @@ function make_random_pipe()
 end
 
 function make_pipe(x, height)
- 	pipe_down = 5
-	pipe_up = 3
-	pipe_body = 4
-
  	hitboxes = {}
 
 	gap = sprite_size * 2.5
 
 	for i = 0, height, sprite_size do
-		add(hitboxes, {sprite = pipe_body, x = x, y = i})
+		add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
 	end
 
-	add(hitboxes, {sprite = pipe_down, x = x, y = height})
+	add(hitboxes, {sprite = sprites.pipe_down, x = x, y = height})
 
-	add(hitboxes, {sprite = pipe_up, x = x, y = height + gap + sprite_size})
+	add(hitboxes, {sprite = sprites.pipe_up, x = x, y = height + gap + sprite_size})
 
     for i = height + gap + sprite_size, screen_max, sprite_size do
-		add(hitboxes, {sprite = pipe_body, x = x, y = i})
+		add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
     end
 
     return {
@@ -145,23 +149,21 @@ end
 function make_bird(x, y)
 	gravity = 0.1
 	jump = -1.2
-	rest = 17
-	flap = 18
  	return {
 		x = x,
 		y = y,
 		vy = 0,
-		body_sprite = 1,
-		wing_sprite = rest,
+		body_sprite = sprites.bird_body,
+		wing_sprite = sprites.bird_rest,
 		drop = function(self, frame)
 			self.vy += gravity
 			self.y += self.vy
-			self.wing_sprite = rest
+			self.wing_sprite = sprites.bird_rest
 		end,
 		flap = function(self)
 	 		self.vy = jump
 			self.y = bracket(self.y + self.vy)
-			self.wing_sprite = flap
+			self.wing_sprite = sprites.bird_flap
 		end,
 		is_offscreen = function(self)
             return (self.y >= screen_max) or (self.y <= screen_min - sprite_size / 2)
