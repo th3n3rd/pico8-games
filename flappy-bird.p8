@@ -24,11 +24,9 @@ function _update60()
 		return
 	end
 
-    if ((frame % 100) == 0) then
-        add(pipes, make_random_pipe())
-    end
+    if (should_add_pipe()) add(pipes, make_random_pipe())
 
-    if (#pipes > 2) deli(pipes, 1)
+    if (too_many_pipes()) deli(pipes, 1)
 
 	foreach(pipes, function(p)
 		p:move()
@@ -68,6 +66,14 @@ function _draw()
  	if (debug) debug_overlay()
 
  	if (game_over) game_over_overlay()
+end
+
+function should_add_pipe()
+    return (frame % 100) == 0
+end
+
+function too_many_pipes()
+    return #pipes > 2
 end
 
 function hcenter(text)
