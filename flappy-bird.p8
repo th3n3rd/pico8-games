@@ -7,7 +7,6 @@ screen_max = 128
 screen_center = screen_max / 2
 sprite_size = 8
 text_size = 8
-debug = true
 sprites = {
     bird_body = 1,
     bird_rest = 17,
@@ -39,11 +38,14 @@ function _init()
     game_over = false
     frame = 0
     score = track_score()
+    logs = logging()
     pipes = {}
     bird = make_bird(screen_center, screen_center)
 end
 
 function _update60()
+    logs:clear()
+
     if (game_over) then
         if (btn(❎)) _init()
         return
@@ -87,7 +89,7 @@ function _draw()
 
     score:draw()
 
-    if (debug) debug_overlay()
+    logs:draw()
 
     if (game_over) game_over_overlay()
 end
@@ -224,13 +226,21 @@ function track_score()
     }
 end
 
-function debug_overlay()
-    lines = {
-        -- put strings here
+function logging()
+    return {
+        lines = {},
+        clear = function(self)
+            self.lines = {}
+        end
+        debug = function(self, text)
+            add(self.lines, text)
+        end,
+        draw = function(self)
+            for i,l in ipairs(self.lines) do
+                print("-- "..l, score.x, score.y + (text_size * i), colours.white)
+            end
+        end
     }
-    for i,l in ipairs(lines) do
-        print("--"..l, score.x, score.y + (text_size * i), colours.white)
-    end
 end
 
 function map_overlay()
