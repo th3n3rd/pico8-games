@@ -108,7 +108,7 @@ function make_pipe(x, height)
 
 	gap = sprite_size * 2.5
 
-	for i=0,height,sprite_size do
+	for i = 0, height, sprite_size do
 		add(hitboxes, {sprite = pipe_body, x = x, y = i})
 	end
 
@@ -116,8 +116,8 @@ function make_pipe(x, height)
 
 	add(hitboxes, {sprite = pipe_up, x = x, y = height + gap + sprite_size})
 
-    for i=height+gap+sprite_size,screen_max,sprite_size do
-		add(hitboxes, {sprite = pipe_body, x = x, y =i})
+    for i = height + gap + sprite_size, screen_max, sprite_size do
+		add(hitboxes, {sprite = pipe_body, x = x, y = i})
     end
 
     return {
@@ -130,7 +130,7 @@ function make_pipe(x, height)
         collides = function(self, other)
             hit = false
             foreach(self.hitboxes, function(h)
-                if((collide(h, other))) hit = true
+                if (collide(h, other)) hit = true
             end)
 			return hit
      	end,
@@ -174,14 +174,14 @@ function make_bird(x, y)
 end
 
 function game_over_overlay()
-	text ={
+	text = {
 		game_over = "g a m e   o v e r",
 		best_score = "best score: "..best_score,
 		press_key = "press ❎ to restart"
 	}
 	rectfill(16, 48, 112, 88,5)
-	rect(17, 49, 111,87, 7)
-	print(text.game_over,hcenter(text.game_over), 57, 0)
+	rect(17, 49, 111, 87, 7)
+	print(text.game_over, hcenter(text.game_over), 57, 0)
 	print(text.game_over, hcenter(text.game_over), 56, 7)
 	print(text.best_score, hcenter(text.best_score), 69, 0)
 	print(text.best_score, hcenter(text.best_score), 68, 7)
@@ -203,7 +203,7 @@ function debug_overlay()
 end
 
 function map_overlay()
-	map(0,0,0,screen_max / 2 - 8)
+	map(0, 0, 0, (screen_max / 2) - sprite_size)
 end
 __gfx__
 0000000000000000cccccccc7abbbbbb07abbbb007abbbb000000000000000000000000077777777000000000000000000000000000000000000000000000000
