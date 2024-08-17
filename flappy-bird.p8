@@ -4,6 +4,7 @@ __lua__
 best_score = 0
 screen_min = 0
 screen_max = 128
+screen_center = screen_max / 2
 sprite_size = 8
 text_size = 8
 bg = 12
@@ -23,7 +24,7 @@ function _init()
     score = 0
     game_over = false
     pipes = {}
-    bird = make_bird(screen_max / 2, screen_max / 2)
+    bird = make_bird(screen_center, screen_center)
 end
 
 function _update60()
@@ -84,15 +85,15 @@ function too_many_pipes()
 end
 
 function hcenter(text)
-    return (screen_max / 2) - (#text * 2)
+    return screen_center - (#text * 2)
 end
 
 function vcenter(text)
-    return (screen_max) / 2 - 1
+    return screen_center
 end
 
 function bracket(value)
-    return max(0, min(screen_max - sprite_size, value))
+    return max(screen_min, min(screen_max - sprite_size, value))
 end
 
 function collide(a, b)
@@ -207,7 +208,7 @@ function debug_overlay()
 end
 
 function map_overlay()
-    map(0, 0, 0, (screen_max / 2) - sprite_size)
+    map(0, 0, 0, screen_center - sprite_size)
 end
 __gfx__
 0000000000000000cccccccc7abbbbbb07abbbb007abbbb000000000000000000000000077777777000000000000000000000000000000000000000000000000
