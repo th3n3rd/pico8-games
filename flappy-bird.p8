@@ -126,16 +126,16 @@ function make_random_pipe()
     return make_pipe(screen_max, 10 + rnd(80))
 end
 
-function make_pipe(x, height)
+function make_pipe(x, gap_height)
     hitboxes = {}
 
     gap = sprite_size * 2.5
 
-    for i = 0, height, sprite_size do
+    for i = 0, gap_height, sprite_size do
         add(hitboxes, {sprite = sprites.pipe_body, x = x, y = i})
     end
 
-    pipe_down = {sprite = sprites.pipe_down, x = x, y = height}
+    pipe_down = {sprite = sprites.pipe_down, x = x, y = gap_height}
     add(hitboxes, pipe_down)
 
     pipe_up = {sprite = sprites.pipe_up, x = x, y = pipe_down.y + sprite_size + gap}
