@@ -231,7 +231,7 @@ function logging()
         lines = {},
         clear = function(self)
             self.lines = {}
-        end
+        end,
         debug = function(self, text)
             add(self.lines, text)
         end,
