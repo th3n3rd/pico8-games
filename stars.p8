@@ -82,10 +82,18 @@ star = entity:extend({
 
 function star:update()
     self.y += self.speed
-    if (self.y - self.radius >= 128) then
-        self.y = -self.radius
-        self.x = rnd(128)
+    if (self:is_offscreen()) then
+        self:reset()
     end
+end
+
+function star:is_offscreen()
+    return self.y - self.radius >= 128
+end
+
+function star:reset()
+    self.y = -self.radius
+    self.x = rnd(128)
 end
 
 function star:draw()
