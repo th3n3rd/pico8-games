@@ -19,7 +19,16 @@ function _init()
         trace = false
     })
 
-    targets = spawn_group:new()
+    targets = spawn_group:new({
+        spawn_fn = function()
+            return target:new({
+                x = rnd(128),
+                y = rnd(128),
+                size = 3,
+                spawned_at = time(),
+            })
+        end
+    })
 end
 
 function _update60()
@@ -125,7 +134,8 @@ target = entity:extend({
 spawn_group = class:extend({
     objects = {},
     spawn_rate = 100,
-    spawn_cooldown = 0
+    spawn_cooldown = 0,
+    spawn_fn = function() end
 })
 
 score = entity:extend({
@@ -252,12 +262,7 @@ end
 
 function spawn_group:update()
     if (self.spawn_cooldown <= 0) then
-        add(self.objects, target:new({
-            x = rnd(128),
-            y = rnd(128),
-            size = 3,
-            spawned_at = time(),
-        }))
+        add(self.objects, self.spawn_fn())
         self.spawn_cooldown = self.spawn_rate
     end
 
