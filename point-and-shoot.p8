@@ -5,8 +5,6 @@ __lua__
 function _init()
     poke(0x5f2d, 1)
 
-    debug = {}
-
     high_score = score:new({
         x = 4,
         y = 4
@@ -45,9 +43,7 @@ function _draw()
 
     high_score:draw()
 
-    for i,d in ipairs(debug) do
-        print(d, 4, (i + 1) * 6, 8)
-    end
+    debug:draw()
 end
 -->8
 -- common
@@ -102,6 +98,15 @@ mouse = {}
 function mouse:btn(n)
     return stat(34) == n
 end
+
+debug = {}
+
+function debug:draw()
+    for i,d in ipairs(debug) do
+        print(d, 4, (i + 1) * 6, 8)
+    end
+end
+
 -->8
 -- objects
 
