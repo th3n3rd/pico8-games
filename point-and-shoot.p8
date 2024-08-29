@@ -108,7 +108,7 @@ function debug:draw()
 end
 
 -->8
--- objects
+-- types
 
 crosshair = entity:extend()
 
