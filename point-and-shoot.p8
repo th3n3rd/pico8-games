@@ -30,7 +30,7 @@ function _init()
 end
 
 function _update60()
-    p1:update(targets.objects, high_score)
+    p1:update(targets, high_score)
     targets:update()
 end
 
@@ -106,7 +106,6 @@ function debug:draw()
         print(d, 4, (i + 1) * 6, 8)
     end
 end
-
 -->8
 -- types
 
@@ -172,13 +171,15 @@ function player:update(targets, score)
 
     for b in all(self.bullets) do
         b:update()
-        for t in all(targets) do
+
+        targets:foreach(function (t)
             if (b:collides(t)) then
                 b:explode()
                 local points = t:hit()
                 score:update(points)
             end
-        end
+        end)
+
         if (not b.visible) del(self.bullets, b)
     end
 
@@ -282,6 +283,12 @@ end
 function spawn_group:draw()
     for e in all(self.objects) do
         e:draw()
+    end
+end
+
+function spawn_group:foreach(fn)
+    for o in all(self.objects) do
+        fn(o)
     end
 end
 -->8
