@@ -59,6 +59,7 @@ function class:new(props)
     setmetatable(instance, {
         __index = self
     })
+    if (instance.init) instance:init()
     return instance
 end
 
@@ -117,6 +118,7 @@ bullet = entity:extend({
     sy = 0,
     tx = 0,
     ty = 0,
+    size = 2,
     speed = 6,
     visible = true
 })
@@ -149,8 +151,26 @@ spawn_group = class:extend({
 score = entity:extend({
     value = 0
 })
+
+particle = entity:extend({
+    angle = rnd(),
+    dx = 0,
+    dy = 0,
+    accel = 0.08,
+    size = 1,
+    life = 30,
+    colour = 8
+})
+
+explosion = class:extend({
+    particles = {}
+})
 -->8
 -- player
+
+function player:init()
+    self.animations = {}
+end
 
 function player:update(targets, score)
     self.dx *= friction
@@ -187,16 +207,29 @@ function player:update(targets, score)
                 b:explode()
                 local points = t:hit()
                 score:update(points)
+                add(self.animations, explosion:new({
+                    x = t.x,
+                    y = t.y
+                }))
             end
         end)
 
         if (not b.visible) del(self.bullets, b)
     end
 
+    for a in all(self.animations) do
+        a:update()
+        if (a:is_done()) del(self.animations, a)
+    end
+
     self.gun.cooldown -= 1
 end
 
 function player:draw()
+    for a in all(self.animations) do
+        a:draw()
+    end
+
     self.crosshair:draw()
 
     if (self.trace) self.crosshair:trace(self)
@@ -241,7 +274,7 @@ function bullet:update()
 end
 
 function bullet:draw()
-    circfill(self.x, self.y, 2, 8)
+    circfill(self.x, self.y, self.size, 8)
 end
 
 function bullet:is_offscreen()
@@ -310,6 +343,58 @@ end
 
 function score:draw()
     print("score: "..self.value, self.x, self.y, 7)
+end
+-->8
+-- particle
+
+function particle:update()	
+    self.dx += cos(self.angle)
+    self.dy += sin(self.angle)
+
+    self.x += self.dx * self.accel
+    self.y += self.dy * self.accel
+
+    self.life -= 1
+    self.colour -= 0.5
+end
+
+function particle:draw()
+    circfill(self.x, self.y, self.size, flr(self.colour))
+end
+
+function particle:is_dead()
+    return self.life <= 0
+end
+
+function explosion:init()
+    for i = 1, 7 + rnd(5) do
+        add(self.particles, particle:new({
+            angle = rnd(),
+            x = self.x,
+            y = self.y
+        }))
+    end
+end
+
+function explosion:update()
+    for p in all(self.particles) do
+        p:update()
+        if (p:is_dead()) del(self.particles, p)
+    end
+end
+
+function explosion:draw()
+    for p in all(self.particles) do
+        p:draw()
+    end
+end
+
+function explosion:is_done()
+    local done = true
+    for p in all(self.particles) do
+        if (not p:is_dead()) done = false
+    end
+    return done
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
