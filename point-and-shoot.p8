@@ -50,6 +50,7 @@ end
 
 sprite_size = 8
 sprite_half_size = 4
+friction = 0.90
 
 class = {}
 
@@ -122,6 +123,9 @@ bullet = entity:extend({
 
 player = entity:extend({
     size = 1,
+    dx = 0,
+    dy = 0,
+    accel = 0.3,
     crosshair = crosshair:new(),
     bullets = {},
     trace = false,
@@ -149,10 +153,16 @@ score = entity:extend({
 -- player
 
 function player:update(targets, score)
-    if (btn(⬆️) or wasd:btn(⬆️)) self.y -= 1
-    if (btn(⬇️) or wasd:btn(⬇️)) self.y += 1
-    if (btn(⬅️) or wasd:btn(⬅️)) self.x -= 1
-    if (btn(➡️) or wasd:btn(➡️)) self.x += 1
+    self.dx *= friction
+    self.dy *= friction
+
+    if (btn(⬆️) or wasd:btn(⬆️)) self.dy -= self.accel
+    if (btn(⬇️) or wasd:btn(⬇️)) self.dy += self.accel
+    if (btn(⬅️) or wasd:btn(⬅️)) self.dx -= self.accel
+    if (btn(➡️) or wasd:btn(➡️)) self.dx += self.accel
+
+    self.x += self.dx
+    self.y += self.dy
 
     self:boxed()
     self.crosshair:update()
